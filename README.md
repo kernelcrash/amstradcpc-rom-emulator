@@ -32,13 +32,13 @@ Overview
 
  - As mentioned, most STM32F4 boards with an SD card adapter are wired the same way. The important
    pins are:
-
+```
    /CS    - PC11
    MOSI   - PD2
    SCK    - PC12
 
    MISO   - PC8
-
+```
  - GND - Amstrad GND
  - +5V - Amstrad +5V
 
