@@ -51,22 +51,22 @@ Overview
   ROM. ROM 6 can be anything, but Maxam is quite handy for being able to type |HELP 
 
   Just make sure you have two .incbin lines uncommented in the poller.S file referencing your roms. eg
-
+```
    rom_base:
    //.incbin "roms/Moon_Buggy.rom"
    .incbin "roms/maxam15.rom"
    .incbin "roms/parados12.rom"
    //.incbin "roms/AMSDOS_0.7.ROM"
-
+```
   The first .incbin line becomes ROM 6, the 2nd one becomes ROM 7
 
 - compile the code. I am using the STM32F4 Discovery std periph libraries from ST. The DSP one
   will probably work as well, so long as you update the STM_COMMON reference in the Makefile.
   I generally do this;
-
+```
    export PATH=/usr/local/gcc-arm-none-eabi-7-2017-q4-major/bin:$PATH
    make
-
+```
  You will end up with an elf and bin file. There is a transfer.sh file to help you use dfu-util
  to flash it to your board. You will need to set your BOOT0/1 jumpers appropriately first.
 
@@ -74,11 +74,11 @@ Overview
   card. I just juse linux mkfs.vfat and its fine. 
 
 - Get some Amstrad CPC DSK files and put them in the root of the SD card using this naming scheme
-
+```
     CPC000.DSK
     CPC001.DSK
     CPC002.DSK
-
+```
  Yep, I know its pretty ugly. This is 'proof of concept' territory.
  Technically, I can only load a DSK file up to 96K in size, but in reality it will load the first 
  96KB of a DSK file. If you look inside an Amstrad DSK file, chances are that its not using the whole
@@ -95,31 +95,31 @@ the edge connector.
 
 Assuming you have your SD card plugged in and you have put at least one DSK file on it called CPC000.DSK,
 try doing this
-
+```
 |A
 CAT
-
+```
 If it's all working, you'll get a listing of whatever is on the CPC000.DSK image.
 
 If its a game, you generally see one file. You can generally use the one filename to load and run it.
 For example:
-
+```
  RUN "ELITE64E"
-
+```
 Now, if you want to change to using CPC001.DSK , or CPC002.DSK, do this
-
+```
 OUT &FB7E,1
-
+```
 Basically, write the DSK image number you want to FB7E. If you want CPC008.DSK, then ;
-
+```
 OUT &FB7E,8
-
+```
 You generally don't have to power off/on the Amstrad. Just do the usual to check the contents of A: 
 have changed
-
+```
 |A
 CAT
-
+```
 For the informed, FB7E is usually used for reading data and status info from the upd765 floppy chip,
 but if you write to it, my code picks up the write and effecitvely reboots the STM32F4 running off
 an alternate disk image.
@@ -134,13 +134,13 @@ board).
 
 Note, if you are just trying to access ROMS, I'd suggest having MAXAM as one of the ROMS you load
 so you can type
-
+```
   |HELP
-
+```
 to list out the ROMS and their number, then you can do something like 
-
+```
   |HELP,7
-
+```
 to show info on using ROM 7 etc.
 
 
