@@ -2,6 +2,9 @@ amstradcpc-rom-emulator
 ---------------------------------
 kernel at kernelcrash dot com
 
+UPDATE: 20180613 - Now uses interrupts and should load whole disks track by 
+track. More technical details on kernelcrash.com
+
 Sort of a proof of concept for using a cheap STM32F407 board directly attached to an Amstrad to emulate
 a few 'hardware components'
 
@@ -26,6 +29,7 @@ Overview
  - PC1 - Amstrad /IORQ
  - PC2 - Amstrad /ROMEN
  - PC3 - Amstrad ROMDIS
+ - PC4 - Amstrad /MREQ
 
  - PA0 is a debug output for hooking up to a logic analyser to check timings, but is not connected 
    normally
@@ -80,9 +84,8 @@ Overview
     CPC002.DSK
 ```
  Yep, I know its pretty ugly. This is 'proof of concept' territory.
- Technically, I can only load a DSK file up to 96K in size, but in reality it will load the first 
- 96KB of a DSK file. If you look inside an Amstrad DSK file, chances are that its not using the whole
- disk image. A lot of older DSK images are 40 cyclinder 192KB files, but often they are half empty.
+ The older 'polling_version' branch could only load the first 96K of a disk. The current interrupt
+ driven version can load whole disks track by track.
 
  Just try out some different games and see if they work.
 
@@ -121,8 +124,7 @@ have changed
 CAT
 ```
 For the informed, FB7E is usually used for reading data and status info from the upd765 floppy chip,
-but if you write to it, my code picks up the write and effecitvely reboots the STM32F4 running off
-an alternate disk image.
+but if you write to it, my code picks up the write and swaps to a new disk image.
 
 The DSK id (ie 0,1,2,3 etc) is stored in the 'backup SRAM' in the STM32F407, so if your board has a 
 battery attached, then it should remember what image was last selected each time the board is 
@@ -149,8 +151,9 @@ What doesn't work?
 
 I haven't tested this greatly. If you are trying to read something with a lot of copy protection, then
 give up. I have only implemented 'some' of the functions of the upd765. There is a lot missing. I have
-pretty much ony impletement the 'read data' function (which reads sectors), and a bunch of related
-functions. I have not implemented read track, and there is no write support at all.
+pretty much only implemented the 'read data' function (which reads sectors), and a bunch of related
+functions. I have not implemented read track. There is write support ('WRITE DATA'), but I have not 
+tested it greatly.
 
 But a lot of games do load. Just try stuff.
 
