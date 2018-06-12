@@ -7,10 +7,6 @@
 
 #include "diskio.h"
 
-#ifdef ENABLE_SEMIHOSTING
-#include <stdio.h>
-#endif
-
 #include <string.h> // memcpy
 
 #include "stm32f4xx.h"

@@ -1442,6 +1442,9 @@ SD_Error SD_ReadMultiBlocksFIXED(uint8_t *readbuff, uint32_t ReadAddr, uint32_t 
 
   if (SD_OK != errorstatus)
   {
+#ifdef DBGIO
+  printf("SD_ReadMultiBlocksFIXED . HERE1 %d\n",errorstatus);
+#endif
     return(errorstatus);
   }
 
@@ -1465,13 +1468,18 @@ SD_Error SD_ReadMultiBlocksFIXED(uint8_t *readbuff, uint32_t ReadAddr, uint32_t 
 
   if (errorstatus != SD_OK)
   {
+#ifdef DBGIO
+  printf("SD_ReadMultiBlocksFIXED . HERE2 %d\n",errorstatus);
+#endif
     return(errorstatus);
   }
 
   SDIO_ITConfig(SDIO_IT_DCRCFAIL | SDIO_IT_DTIMEOUT | SDIO_IT_DATAEND | SDIO_IT_RXOVERR | SDIO_IT_STBITERR, ENABLE);
   SDIO_DMACmd(ENABLE);
   SD_LowLevel_DMA_RxConfig((uint32_t *)readbuff, (NumberOfBlocks * BlockSize));
-
+#ifdef DBGIO
+  printf("end of SD_ReadMultiBlocksFIXED . errorstatus = %d\n",errorstatus);
+#endif
   return(errorstatus);
 }
 
@@ -1517,6 +1525,9 @@ SD_Error SD_WaitReadOperation(void)
   /*!< Clear all the static flags */
   SDIO_ClearFlag(SDIO_STATIC_FLAGS);
 
+#ifdef DBGIO
+  printf("end of SD_WaitReadOperation . errorstatus = %d\n",errorstatus);
+#endif
   if (TransferError != SD_OK)
   {
     return(TransferError);
